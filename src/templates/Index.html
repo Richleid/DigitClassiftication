@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perfil Estudiantil de Carolayne Mejia</title>
+    <link rel="stylesheet" href="static/css/style.css" />
+  </head>
+  <header class="header">
+    <div class="profile-container">
+      <div class="image-container left">
+        <!-- La imagen se añadirá mediante CSS para tener un fondo blanco -->
+      </div>
+
+      <div class="info">
+        <h2>UNIVERSIDAD TÉCNICA DEL NORTE</h2>
+        <p>FACULTAD DE INGENIERÍA EN CIENCIAS APLICADAS</p>
+        <p>CARRERA DE INGENIERÍA EN SOFTWARE</p>
+      </div>
+      <div class="image-container right"></div>
+    </div>
+  </header>
+  <body>
+    <main>
+      <div class="big-data-container">
+        <h1>Big Data & Deep Learning</h1>
+        <p>
+          El Big Data está revolucionando el análisis de datos masivos,
+          permitiendo insights y avances sin precedentes.
+        </p>
+        <p>
+          El Deep Learning es una técnica avanzada de aprendizaje automático que
+          imita el cerebro humano para reconocer patrones y tomar decisiones,
+          siendo esencial para crear sistemas inteligentes como los asistentes
+          de voz o las recomendaciones online.
+        </p>
+      </div>
+      <div class="digit-classification-container">
+        <h1>Digit Classification</h1>
+        <p>Modelo de deep learning para analizar imágenes de digitos.</p>
+        <p>A continuación carga una imágen de un dígito numérico.</p>
+        <form id="upload-form" method="post" enctype="multipart/form-data">
+          <input
+            type="file"
+            name="file"
+            id="fileInput"
+            onchange="previewFile();"
+          />
+           <!-- Contenedor para la vista previa de la imagen -->
+           <div id="preview-container" style="margin-top: 20px;">
+            <img id="image-preview" src="" alt="Vista previa de la imagen" style="max-width: 100%; height: auto;" />
+          </div>
+          <input
+            type="button"
+            value="Realizar Pronóstico"
+            onclick="submitForm();"
+          />
+        </form>
+        <div id="prediction-result"></div>
+      </div>
+    </main>
+    <footer>
+      <div class="footer-container">© 2023 Realizado por Carolayne Mejia</div>
+    </footer>
+    <script>
+      function previewFile() {
+        var preview = document.getElementById("image-preview");
+        var file = document.getElementById("fileInput").files[0];
+        var reader = new FileReader();
+
+        reader.onloadend = function () {
+          preview.src = reader.result;
+        };
+
+        if (file) {
+          reader.readAsDataURL(file);
+        } else {
+          preview.src = "";
+        }
+      }
+
+      function submitForm() {
+        var form = document.getElementById("upload-form");
+        var formData = new FormData(form);
+
+        fetch("/upload", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("prediction-result").innerText =
+              "Predicción: " + data.prediction;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    </script>
+  </body>
+</html>
